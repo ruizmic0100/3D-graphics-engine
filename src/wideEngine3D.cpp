@@ -1,11 +1,29 @@
 #include <iostream>
 #include "../include/wideConsoleEngine.h"
 
+class GameEngine : public wideConsoleEngine
+{
+    public:
+        GameEngine() {};
+
+        virtual bool onUserCreate() {
+
+            return true;
+        }
+
+        virtual bool onUserUpdate(float frameCounter) {
+            return true;
+        }
+
+};
+
 
 int main()
 {
-    wideConsoleEngine wce;
+    GameEngine ge;
 
-    std::cout << wce.constructConsole(50, 24) << std::endl;
+    ge.constructConsole(80, 40);
+    ge.Start();
+
     return 0;
 }

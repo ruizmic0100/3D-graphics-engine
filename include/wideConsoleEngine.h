@@ -34,6 +34,19 @@
 #include <atomic>
 #include <mutex>
 
+enum COLOUR
+{
+    FG_BLACK     = 0x0000,
+    FG_DARK_BLUE = 0x0001,
+};
+
+enum PIXEL_TYPE
+{
+    PIXEL_SOLID = 0x2588,
+};
+
+
+
 class wideConsoleEngine {
 public:
     wideConsoleEngine()
@@ -114,9 +127,13 @@ public:
         }
     }
 
+    void Clip(int& x, int& y) {
+        if (x < 0) x = 0;
+    }
+
     ~wideConsoleEngine() {
         SetConsoleActiveScreenBuffer(originalConsole_);
-        //delete[] bufScreen_;
+        delete[] bufScreen_;
     }
 
     void Start()
@@ -221,6 +238,7 @@ public:
                 wchar_t s[256];
                 swprintf_s(s, 256, L"Wide Game Engine - %s - FPS: %3.2f", appName_.c_str(), 1.0f / frameCounter);
                 SetConsoleTitle(s);
+                // This is the gold nugget. This function allows us to swap our screen buffer to the console buffer in one hit.
                 WriteConsoleOutput(consoleOutput_, bufScreen_, { (short)screenWidth_, (short)screenHeight_ }, { 0,0 }, &rectWindow_);
             }
         }
